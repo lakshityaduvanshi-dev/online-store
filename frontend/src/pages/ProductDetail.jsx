@@ -7,7 +7,7 @@ const ProductDetail = ({ productId, setView }) => {
   const { addToCart } = useCart();
 
   useEffect(() => {
-    fetch(`https://online-store-go9t.onrender.com/api/products/${productId}`)
+    fetch(`https://online-store-1-f7cj.onrender.com/api/products/${productId}`)
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch((err) => console.log(err));

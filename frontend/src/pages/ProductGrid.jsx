@@ -12,7 +12,7 @@ export default function ProductGrid({ setView, setSelectedProductId, searchQuery
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        let url = `https://online-store-go9t.onrender.com/api/products?search=${searchQuery || ''}&category=${selectedCategory || ''}&sort=${sortOption}`;
+        let url = `https://online-store-1-f7cj.onrender.com/api/products?search=${searchQuery || ''}&category=${selectedCategory || ''}&sort=${sortOption}`;
         const res = await fetch(url);
         const data = await res.json();
         setProducts(data);

@@ -33,7 +33,7 @@ export default function Cart({ setView }) {
   total
 };
 
-      const res = await fetch('https://online-store-go9t.onrender.com/api/orders', {
+      const res = await fetch('https://online-store-1-f7cj.onrender.com/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderPayload)

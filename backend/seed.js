@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Product = require('./models/Product');
 
-const MONGO_URI = "mongodb://localhost:27017/onlinestore"; 
+const MONGO_URI = "mongodb+srv://Lakshit:12345@cluster0.vgysah5.mongodb.net/?appName=Cluster0"; 
 
 const mockProducts = [
   // --- ELECTRONICS & AUDIO (TECH) ---

@@ -11,7 +11,7 @@ export default function AdminDashboard({ setView }) {
   const [msg, setMsg] = useState('');
 
   const refreshList = async () => {
-    const res = await fetch('https://online-store-go9t.onrender.com/api/products');
+    const res = await fetch('https://online-store-1-f7cj.onrender.com/api/products');
     const data = await res.json();
     setProducts(data);
   };
@@ -21,7 +21,7 @@ export default function AdminDashboard({ setView }) {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('https://online-store-go9t.onrender.com/api/products', {
+      const res = await fetch('https://online-store-1-f7cj.onrender.com/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description, category, price, imageUrl, stockStatus: status })
@@ -36,7 +36,7 @@ export default function AdminDashboard({ setView }) {
 
   const handleDelete = async (id) => {
     if (window.confirm('Remove asset permanently from MongoDB clusters?')) {
-      await fetch(`https://online-store-go9t.onrender.com/api/products/${id}`, { method: 'DELETE' });
+      await fetch(`https://online-store-1-f7cj.onrender.com//api/products/${id}`, { method: 'DELETE' });
       refreshList();
     }
   };

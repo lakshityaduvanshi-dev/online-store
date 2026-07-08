@@ -8,7 +8,7 @@ export default function Orders({ setView }) {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      fetch(`https://online-store-go9t.onrender.com/api/orders/${user.id}`)
+      fetch(`https://online-store-1-f7cj.onrender.com/api/orders/${user.id}`)
         .then(res => res.json())
         .then(data => { setOrders(data); setLoading(false); })
         .catch(err => { console.error(err); setLoading(false); });
