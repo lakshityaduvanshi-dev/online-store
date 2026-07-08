@@ -1,0 +1,28 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: -0.01em;
+  color: #1a1a1a;
+  background-color: #ffffff;
+}
+
+/* Custom interactive hover variables */
+.card-hover-effect {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05) !important;
+}
+
+.img-hover {
+  transition: transform 0.5s ease;
+}
+
+.card-hover-effect:hover .img-hover {
+  transform: scale(1.04);
+}
+
+input:focus, button:focus {
+  box-shadow: none !important;
+}
