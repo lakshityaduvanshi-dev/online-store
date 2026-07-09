@@ -36,7 +36,7 @@ export default function AdminDashboard({ setView }) {
 
   const handleDelete = async (id) => {
     if (window.confirm('Remove asset permanently from MongoDB clusters?')) {
-      await fetch(`https://online-store-1-f7cj.onrender.com//api/products/${id}`, { method: 'DELETE' });
+      await fetch(`https://online-store-1-f7cj.onrender.com/api/products/${id}`, { method: 'DELETE' });
       refreshList();
     }
   };
