@@ -4,7 +4,8 @@ import { useAuth } from '../context/AuthContext';
 
 export default function Cart({ setView }) {
   const { cartItems, clearCart, removeFromCart, updateQty } = useCart();
-  const { user, isAuthenticated } = useAuth();
+  // Humne token ko bhi nikal liya agar backend validation mangta hai toh
+  const { user, isAuthenticated, token } = useAuth();
 
   const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
   const shipping = subtotal > 10000 || subtotal === 0 ? 0.00 : 150.00;
@@ -20,22 +21,26 @@ export default function Cart({ setView }) {
 
     try {
       const orderPayload = {
-  userId: user.id,
-  items: cartItems.map(i => ({ 
-    product: i._id || i.id, 
-    title: i.title, 
-    qty: i.qty, 
-    price: i.price 
-  })),
-  subtotal, 
-  shipping, 
-  tax, 
-  total
-};
+        userId: user.id || user._id,
+        items: cartItems.map(i => ({ 
+          product: i._id || i.id, 
+          title: i.title, 
+          qty: i.qty, 
+          price: i.price 
+        })),
+        subtotal: Number(subtotal.toFixed(2)), 
+        shipping: Number(shipping.toFixed(2)), 
+        tax: Number(tax.toFixed(2)), 
+        total: Number(total.toFixed(2))
+      };
 
       const res = await fetch('https://online-store-1-f7cj.onrender.com/api/orders', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          // Agar aapka backend protected hai, toh yeh line mandatory hai:
+          ...(token && { 'Authorization': `Bearer ${token}` })
+        },
         body: JSON.stringify(orderPayload)
       });
 
@@ -44,7 +49,8 @@ export default function Cart({ setView }) {
         clearCart();
         setView('orders');
       } else {
-        alert('Checkout interface tracking failure.');
+        const errData = await res.json().catch(() => ({}));
+        alert(`Checkout failure: ${errData.message || 'Tracking system error.'}`);
       }
     } catch (err) {
       console.error(err);
@@ -65,26 +71,29 @@ export default function Cart({ setView }) {
       <h3 className="fw-bold mb-4">Your Selected Bag</h3>
       <div className="row g-5">
         <div className="col-lg-7">
-          {cartItems.map(item => (
-            <div key={item._id} className="row align-items-center mb-4 border-bottom pb-4 g-3">
-              <div className="col-3 col-md-2">
-                <img src={item.imageUrl} alt="" className="w-100 rounded-3 border" style={{ aspectRatio: '1', objectFit: 'cover' }} />
+          {cartItems.map(item => {
+            const itemId = item._id || item.id;
+            return (
+              <div key={itemId} className="row align-items-center mb-4 border-bottom pb-4 g-3">
+                <div className="col-3 col-md-2">
+                  <img src={item.imageUrl || 'https://via.placeholder.com/150'} alt="" className="w-100 rounded-3 border" style={{ aspectRatio: '1', objectFit: 'cover' }} />
+                </div>
+                <div className="col-9 col-md-5">
+                  <h6 className="fw-semibold text-dark mb-1">{item.title}</h6>
+                  <span className="small text-secondary">{item.category}</span>
+                </div>
+                <div className="col-6 col-md-3 d-flex align-items-center gap-2">
+                  <button className="btn btn-sm btn-light border rounded-circle" onClick={() => updateQty(itemId, item.qty - 1)}>-</button>
+                  <span className="fw-medium px-1">{item.qty}</span>
+                  <button className="btn btn-sm btn-light border rounded-circle" onClick={() => updateQty(itemId, item.qty + 1)}>+</button>
+                </div>
+                <div className="col-6 col-md-2 text-end d-flex flex-row flex-md-column justify-content-between align-items-center">
+                  <span className="fw-bold mb-0">₹{(item.price * item.qty).toLocaleString('en-IN')}</span>
+                  <button className="btn text-danger btn-sm p-0 border-0 mt-md-2" onClick={() => removeFromCart(itemId)}><i className="bi bi-trash"></i></button>
+                </div>
               </div>
-              <div className="col-9 col-md-5">
-                <h6 className="fw-semibold text-dark mb-1">{item.title}</h6>
-                <span className="small text-secondary">{item.category}</span>
-              </div>
-              <div className="col-6 col-md-3 d-flex align-items-center gap-2">
-                <button className="btn btn-sm btn-light border rounded-circle" onClick={() => updateQty(item._id, item.qty - 1)}>-</button>
-                <span className="fw-medium px-1">{item.qty}</span>
-                <button className="btn btn-sm btn-light border rounded-circle" onClick={() => updateQty(item._id, item.qty + 1)}>+</button>
-              </div>
-              <div className="col-6 col-md-2 text-end d-flex flex-row flex-md-column justify-content-between align-items-center">
-                <span className="fw-bold mb-0">₹{(item.price * item.qty).toLocaleString('en-IN')}</span>
-                <button className="btn text-danger btn-sm p-0 border-0 mt-md-2" onClick={() => removeFromCart(item._id)}><i className="bi bi-trash"></i></button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="col-lg-5">
