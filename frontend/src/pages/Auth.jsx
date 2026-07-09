@@ -16,7 +16,7 @@ export default function Auth({ setView }) {
     const body = isLogin ? { email, password } : { name, email, password };
 
     try {
-      const res = await fetch(`https://online-store-1-f7cj.onrender.com/${endpoint}`, {
+      const res = await fetch(`https://online-store-1-f7cj.onrender.com${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body)
